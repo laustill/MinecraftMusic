@@ -1,20 +1,32 @@
 peripheral.find("modem", rednet.open)
 local speaker = peripheral.find("speaker")
-local dec = require("cc.audio.dfpwm").make_decoder()
-local station, current
+local dfpwm = require("cc.audio.dfpwm")
+local dec = dfpwm.make_decoder()
+local list, known = {}, {}
+local tuned, current
+
+local function show()
+  term.clear() term.setCursorPos(1, 1)
+  print("Station: " .. (tuned or "searching..."))
+  print("Playing: " .. (current or "-"))
+  print("\n<- -> station   S skip")
+end
 
 local function listen()
   while true do
     local id, msg = rednet.receive("radio")
-    if type(msg) == "table" and msg.data then
-      station = msg.station
-      if msg.title ~= current then
-        current = msg.title
-        print("Playing: " .. current)
+    if type(msg) == "table" and msg.data and msg.station then
+      if not known[msg.station] then
+        known[msg.station] = true
+        table.insert(list, msg.station)
+        if not tuned then tuned = msg.station show() end
       end
-      local buf = dec(msg.data)
-      while not speaker.playAudio(buf, msg.volume or 3) do
-        os.pullEvent("speaker_audio_empty")
+      if msg.station == tuned then
+        if msg.title ~= current then current = msg.title show() end
+        local buf = dec(msg.data)
+        while not speaker.playAudio(buf, msg.volume or 3) do
+          os.pullEvent("speaker_audio_empty")
+        end
       end
     end
   end
@@ -23,13 +35,20 @@ end
 local function controls()
   while true do
     local _, key = os.pullEvent("key")
-    if key == keys.s and station then
-      rednet.broadcast({ skip = station }, "radio_ctrl")
+    if (key == keys.left or key == keys.right) and #list > 1 then
+      local i = 1
+      for n, s in ipairs(list) do if s == tuned then i = n end end
+      i = key == keys.right and i % #list + 1 or (i - 2) % #list + 1
+      tuned, current = list[i], nil
+      dec = dfpwm.make_decoder()
       speaker.stop()
-      print("Skipping...")
+      show()
+    elseif key == keys.s and tuned then
+      rednet.broadcast({ skip = tuned }, "radio_ctrl")
+      speaker.stop()
     end
   end
 end
 
-print("Listening...  (S = skip)")
+show()
 parallel.waitForAny(listen, controls)
