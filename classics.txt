@@ -1,0 +1,46 @@
+Beethoven s 5th Symphony|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/01_Beethoven_s_5th_Symphony.dfpwm
+Piotr Ilich Tchaikovsky - 1812 Overture Finale|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/02_Piotr_Ilich_Tchaikovsky_-_1812_Overture_Finale.dfpwm
+Wolfgang Amadeus Mozart - Eine kleine Nachtmusik|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/03_Wolfgang_Amadeus_Mozart_-_Eine_kleine_Nachtmusik.dfpwm
+Bach - Toccata and Fugue in D minor BWV 565|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/04_Bach_-_Toccata_and_Fugue_in_D_minor_BWV_565.dfpwm
+Rossini - William Tell Overture - Final|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/05_Rossini_-_William_Tell_Overture_-_Final.dfpwm
+Johann Pachelbel - Canon in D Major|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/07_Johann_Pachelbel_-_Canon_in_D_Major.dfpwm
+Johann Strauss II - The Blue Danube Waltz|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/08_Johann_Strauss_II_-_The_Blue_Danube_Waltz.dfpwm
+Carmina Burana ~ O Fortuna Carl Orff ~ Andre Rieu|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/09_Carmina_Burana_~_O_Fortuna_Carl_Orff_~_Andre_Rieu.dfpwm
+Richard Strauss - Also Sprach Zarathustra 2001 Space Odyssey opening theme|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/10_Richard_Strauss_-_Also_Sprach_Zarathustra_2001_Space_Odyssey_opening_theme.dfpwm
+Offenbach - Infernal Galop|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/11_Offenbach_-_Infernal_Galop.dfpwm
+Handel Messiah - Hallelujah Chorus|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/12_Handel_Messiah_-_Hallelujah_Chorus.dfpwm
+Georges Bizet - Les Toreadors from Carmen Suite No. 1|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/13_Georges_Bizet_-_Les_Toreadors_from_Carmen_Suite_No._1.dfpwm
+BEETHOVEN.ODE TO JOY|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/14_BEETHOVEN.ODE_TO_JOY.dfpwm
+Sir Edward Elgar - Pomp and Circumstance March No.1|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/15_Sir_Edward_Elgar_-_Pomp_and_Circumstance_March_No.1.dfpwm
+Amilcare Ponchielli - Dance of the Hours|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/16_Amilcare_Ponchielli_-_Dance_of_the_Hours.dfpwm
+Mendelssohn s Wedding March|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/17_Mendelssohn_s_Wedding_March.dfpwm
+Moonlight Sonata|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/18_Moonlight_Sonata.dfpwm
+Dance of the Sugar Plum Fairy on the Glass Armonica|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/19_Dance_of_the_Sugar_Plum_Fairy_on_the_Glass_Armonica.dfpwm
+Waltz Over the Waves Juventino Rosas|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/20_Waltz_Over_the_Waves_Juventino_Rosas.dfpwm
+Imperial March or Darth Vader s Theme|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/21_Imperial_March_or_Darth_Vader_s_Theme.dfpwm
+Julius Fucik - Entry of the Gladiators|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/22_Julius_Fucik_-_Entry_of_the_Gladiators.dfpwm
+The Flower Duet Lakme|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/23_The_Flower_Duet_Lakme.dfpwm
+Paul Abraham Dukas - Sorcerer s Apprentice|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/24_Paul_Abraham_Dukas_-_Sorcerer_s_Apprentice.dfpwm
+Hoe Down from rodeo|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/25_Hoe_Down_from_rodeo.dfpwm
+Wagner - RIDE OF THE VALKYRIES - Furtwangler|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/26_Wagner_-_RIDE_OF_THE_VALKYRIES_-_Furtwangler.dfpwm
+Palladio|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/28_Palladio.dfpwm
+Frederic Chopin - Marche Funebre - Funeral March|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/29_Frederic_Chopin_-_Marche_Funebre_-_Funeral_March.dfpwm
+Tchaikovsky Nutcracker Suite - Russian Dance Trepak|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/31_Tchaikovsky_Nutcracker_Suite_-_Russian_Dance_Trepak.dfpwm
+Johannes Brahms - Lullaby|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/32_Johannes_Brahms_-_Lullaby.dfpwm
+Aaron Copland - Fanfare for the Common Man|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/33_Aaron_Copland_-_Fanfare_for_the_Common_Man.dfpwm
+La gazza ladra The Thieving Magpie|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/34_La_gazza_ladra_The_Thieving_Magpie.dfpwm
+Flight of the Bumblebee|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/35_Flight_of_the_Bumblebee.dfpwm
+Carnival of the Animals - Aquarium|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/37_Carnival_of_the_Animals_-_Aquarium.dfpwm
+Franz von Suppe - Light Cavalry - Overture|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/38_Franz_von_Suppe_-_Light_Cavalry_-_Overture.dfpwm
+Tchaikovsky Nutcracker Highlights 2 4 March Snowflakes Waltz Lanchbery|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/39_Tchaikovsky_Nutcracker_Highlights_2_4_March_Snowflakes_Waltz_Lanchbery.dfpwm
+Sousa - The Washington Post March|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/40_Sousa_-_The_Washington_Post_March.dfpwm
+BOLERO-RAVEL|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/41_BOLERO-RAVEL.dfpwm
+Camille Saint-Saens - Danse Macabre|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/42_Camille_Saint-Saens_-_Danse_Macabre.dfpwm
+Turkish March Mozart - Rondo Alla Turca|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/43_Turkish_March_Mozart_-_Rondo_Alla_Turca.dfpwm
+United States of America Anthem The Star-Spangled Banner|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/44_United_States_of_America_Anthem_The_Star-Spangled_Banner.dfpwm
+La Marseillaise - Mireille Mathieu|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/45_La_Marseillaise_-_Mireille_Mathieu.dfpwm
+Vivaldi - Spring|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/46_Vivaldi_-_Spring.dfpwm
+Vivaldi Summer|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/47_Vivaldi_Summer.dfpwm
+Autumn - Vivaldi|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/48_Autumn_-_Vivaldi.dfpwm
+Vivaldi - Four Seasons Winter|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/49_Vivaldi_-_Four_Seasons_Winter.dfpwm
+Mozart s Symphony no 40 - 1st movement|https://raw.githubusercontent.com/laustill/MinecraftMusic/main/classics/50_Mozart_s_Symphony_no_40_-_1st_movement.dfpwm
