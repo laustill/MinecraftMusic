@@ -1,24 +1,39 @@
 peripheral.find("modem", rednet.open)
 local list, known, sel = {}, {}, 1
+local playing, paused = {}, {}
+local status = ""
 
 local function draw()
   term.clear() term.setCursorPos(1, 1)
-  print("=== ALL RADIOS ===")
+  print("=== RADIO CONTROL ===")
   if #list == 0 then print("Searching...") end
   for i, s in ipairs(list) do
-    print((i == sel and "> " or "  ") .. s)
+    local mark = i == sel and "> " or "  "
+    local state = paused[s] and " [PAUSED]" or ""
+    print(mark .. s .. state)
+    if playing[s] then print("    " .. playing[s]) end
   end
-  print("\nUp/Down select")
-  print("Enter = tune all")
+  print("\nUp/Down  select")
+  print("Enter    tune all")
+  print("P pause  S skip")
+  if status ~= "" then print("\n" .. status) end
 end
 
 local function listen()
   while true do
     local _, msg = rednet.receive("radio")
-    if type(msg) == "table" and msg.station and not known[msg.station] then
-      known[msg.station] = true
-      table.insert(list, msg.station)
-      draw()
+    if type(msg) == "table" and msg.station then
+      local changed = false
+      if not known[msg.station] then
+        known[msg.station] = true
+        table.insert(list, msg.station)
+        changed = true
+      end
+      if playing[msg.station] ~= msg.title then
+        playing[msg.station] = msg.title
+        changed = true
+      end
+      if changed then draw() end
     end
   end
 end
@@ -26,13 +41,24 @@ end
 local function controls()
   while true do
     local _, key = os.pullEvent("key")
-    if key == keys.up and sel > 1 then sel = sel - 1 draw()
-    elseif key == keys.down and sel < #list then sel = sel + 1 draw()
-    elseif key == keys.enter and list[sel] then
-      rednet.broadcast({ tune = list[sel] }, "radio_ctrl")
-      draw()
-      print("Tuned all to " .. list[sel])
+    local s = list[sel]
+    if key == keys.up and sel > 1 then
+      sel = sel - 1
+    elseif key == keys.down and sel < #list then
+      sel = sel + 1
+    elseif key == keys.enter and s then
+      rednet.broadcast({ tune = s }, "radio_ctrl")
+      status = "Tuned all to " .. s
+    elseif key == keys.s and s then
+      rednet.broadcast({ skip = s }, "radio_ctrl")
+      paused[s] = false
+      status = "Skipped on " .. s
+    elseif key == keys.p and s then
+      paused[s] = not paused[s]
+      rednet.broadcast({ pause = s, state = paused[s] }, "radio_ctrl")
+      status = (paused[s] and "Paused " or "Resumed ") .. s
     end
+    draw()
   end
 end
 
