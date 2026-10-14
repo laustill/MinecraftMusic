@@ -1,0 +1,42 @@
+peripheral.find("modem", rednet.open)
+local station, title, paused = nil, "-", false
+
+local function draw()
+  term.clear() term.setCursorPos(1, 1)
+  print("=== REMOTE ===")
+  print("Station: " .. (station or "searching..."))
+  print("Playing: " .. title)
+  print(paused and "** PAUSED **" or "")
+  print("\nS = skip")
+  print("P = pause/play")
+end
+
+local function listen()
+  while true do
+    local _, msg = rednet.receive("radio")
+    if type(msg) == "table" and msg.station then
+      if msg.station ~= station or msg.title ~= title then
+        station, title = msg.station, msg.title
+        draw()
+      end
+    end
+  end
+end
+
+local function controls()
+  while true do
+    local _, key = os.pullEvent("key")
+    if station and key == keys.s then
+      rednet.broadcast({ skip = station }, "radio_ctrl")
+      paused = false
+      draw()
+    elseif station and key == keys.p then
+      paused = not paused
+      rednet.broadcast({ pause = station, state = paused }, "radio_ctrl")
+      draw()
+    end
+  end
+end
+
+draw()
+parallel.waitForAny(listen, controls)
