@@ -110,4 +110,42 @@ local function broadcast()
           if skip then break end
           local chunk = h.read(CHUNK)
           if not chunk then break end
-          rednet.broadcast({ station = name, title = current, data = chunk, volume =
+          rednet.broadcast({ station = name, title = current, data = chunk, volume = volume }, "radio")
+          t = t + DUR
+          sleep(math.max(0, t - os.clock() - 0.1))
+        end
+        h.close()
+      else
+        print("Can't open " .. song.title)
+      end
+    end
+  end
+end
+
+local function control()
+  while true do
+    local ev, a, b, c = os.pullEvent()
+    if ev == "key" and a == keys.s then
+      doSkip()
+    elseif ev == "key" and a == keys.p then
+      setPaused(not paused)
+    elseif ev == "char" and (a == "+" or a == "=") then
+      setVolume(volume + 0.25)
+    elseif ev == "char" and a == "-" then
+      setVolume(volume - 0.25)
+    elseif ev == "monitor_touch" and mon then
+      local w = mon.getSize()
+      if c == 4 and b >= BAR_X then
+        setVolume((b - BAR_X + 1) / (w - BAR_X) * 3)
+      elseif c >= TOP then
+        if b <= math.floor(w / 2) then setPaused(not paused) else doSkip() end
+      end
+    elseif ev == "rednet_message" and c == "radio_ctrl" and type(b) == "table" then
+      if b.skip == name then doSkip() end
+      if b.pause == name then setPaused(b.state) end
+    end
+  end
+end
+
+print("Broadcasting as " .. name .. "  (S skip, P pause, +/- volume)")
+parallel.waitForAny(broadcast, control)
