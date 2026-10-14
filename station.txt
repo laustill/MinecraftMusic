@@ -2,7 +2,7 @@ local name = ... or "Radio 1"
 peripheral.find("modem", rednet.open)
 local CHUNK = 6 * 1024
 local DUR = CHUNK * 8 / 48000
-local skip = false
+local skip, paused = false, false
 
 local playlist = {}
 for line in io.lines("playlist.txt") do
@@ -34,6 +34,11 @@ local function broadcast()
         skip = false
         local t = os.clock()
         while not skip do
+          if paused then
+            while paused and not skip do sleep(0.2) end
+            t = os.clock()
+          end
+          if skip then break end
           local chunk = h.read(CHUNK)
           if not chunk then break end
           rednet.broadcast({ station = name, title = song.title, data = chunk }, "radio")
@@ -53,11 +58,18 @@ local function control()
     local ev, a, b, c = os.pullEvent()
     if ev == "key" and a == keys.s then
       skip = true
-    elseif ev == "rednet_message" and c == "radio_ctrl" and type(b) == "table" and b.skip == name then
-      skip = true
+    elseif ev == "key" and a == keys.p then
+      paused = not paused
+      print(paused and "Paused" or "Resumed")
+    elseif ev == "rednet_message" and c == "radio_ctrl" and type(b) == "table" then
+      if b.skip == name then skip = true end
+      if b.pause == name then
+        paused = b.state
+        print(paused and "Paused" or "Resumed")
+      end
     end
   end
 end
 
-print("Broadcasting as " .. name .. "  (S = skip)")
+print("Broadcasting as " .. name .. "  (S = skip, P = pause)")
 parallel.waitForAny(broadcast, control)
