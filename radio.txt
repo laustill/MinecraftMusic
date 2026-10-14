@@ -13,7 +13,7 @@ local function listen()
         print("Playing: " .. current)
       end
       local buf = dec(msg.data)
-      while not speaker.playAudio(buf, 3) do
+      while not speaker.playAudio(buf, msg.volume or 3) do
         os.pullEvent("speaker_audio_empty")
       end
     end
