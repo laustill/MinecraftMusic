@@ -1,8 +1,10 @@
 local name = ... or "Radio 1"
 peripheral.find("modem", rednet.open)
+local mon = peripheral.find("monitor")
 local CHUNK = 6 * 1024
 local DUR = CHUNK * 8 / 48000
 local skip, paused = false, false
+local current = "-"
 
 local playlist = {}
 for line in io.lines("playlist.txt") do
@@ -24,11 +26,59 @@ local function open(src)
   return fs.open(src, "rb")
 end
 
+local function drawMon()
+  if not mon then return end
+  mon.setTextScale(1)
+  local w, h = mon.getSize()
+  local half = math.floor(w / 2)
+  local top = 5
+  mon.setBackgroundColor(colors.black)
+  mon.clear()
+  mon.setTextColor(colors.white)
+  mon.setCursorPos(2, 1) mon.write(name)
+  mon.setCursorPos(2, 2) mon.write(current:sub(1, w - 2))
+  mon.setCursorPos(2, 3)
+  mon.setTextColor(paused and colors.red or colors.lime)
+  mon.write(paused and "PAUSED" or "PLAYING")
+
+  local left = paused and colors.green or colors.orange
+  for y = top, h do
+    mon.setCursorPos(1, y)
+    mon.setBackgroundColor(left)
+    mon.write(string.rep(" ", half))
+    mon.setBackgroundColor(colors.blue)
+    mon.write(string.rep(" ", w - half))
+  end
+
+  local mid = math.floor((top + h) / 2)
+  local label = paused and "PLAY" or "PAUSE"
+  mon.setTextColor(colors.white)
+  mon.setBackgroundColor(left)
+  mon.setCursorPos(math.floor((half - #label) / 2) + 1, mid)
+  mon.write(label)
+  mon.setBackgroundColor(colors.blue)
+  mon.setCursorPos(half + math.floor((w - half - 4) / 2) + 1, mid)
+  mon.write("SKIP")
+end
+
+local function setPaused(state)
+  paused = state
+  print(paused and "Paused" or "Resumed")
+  drawMon()
+end
+
+local function doSkip()
+  skip = true
+  paused = false
+end
+
 local function broadcast()
   while true do
     shuffle(playlist)
     for _, song in ipairs(playlist) do
-      print("Now playing: " .. song.title)
+      current = song.title
+      print("Now playing: " .. current)
+      drawMon()
       local h = open(song.src)
       if h then
         skip = false
@@ -41,7 +91,7 @@ local function broadcast()
           if skip then break end
           local chunk = h.read(CHUNK)
           if not chunk then break end
-          rednet.broadcast({ station = name, title = song.title, data = chunk }, "radio")
+          rednet.broadcast({ station = name, title = current, data = chunk }, "radio")
           t = t + DUR
           sleep(math.max(0, t - os.clock() - 0.1))
         end
@@ -57,19 +107,22 @@ local function control()
   while true do
     local ev, a, b, c = os.pullEvent()
     if ev == "key" and a == keys.s then
-      skip = true
+      doSkip()
     elseif ev == "key" and a == keys.p then
-      paused = not paused
-      print(paused and "Paused" or "Resumed")
-    elseif ev == "rednet_message" and c == "radio_ctrl" and type(b) == "table" then
-      if b.skip == name then skip = true end
-      if b.pause == name then
-        paused = b.state
-        print(paused and "Paused" or "Resumed")
+      setPaused(not paused)
+    elseif ev == "monitor_touch" and mon then
+      local w = mon.getSize()
+      if b <= math.floor(w / 2) then
+        setPaused(not paused)
+      else
+        doSkip()
       end
+    elseif ev == "rednet_message" and c == "radio_ctrl" and type(b) == "table" then
+      if b.skip == name then doSkip() end
+      if b.pause == name then setPaused(b.state) end
     end
   end
 end
 
-print("Broadcasting as " .. name .. "  (S = skip, P = pause)")
+print("Broadcasting as " .. name .. "  (S = skip, P = pause, touch screen)")
 parallel.waitForAny(broadcast, control)
