@@ -5,6 +5,9 @@ local CHUNK = 6 * 1024
 local DUR = CHUNK * 8 / 48000
 local skip, paused = false, false
 local current = "-"
+local volume = 3
+local BAR_X = 6
+local TOP = 6
 
 local playlist = {}
 for line in io.lines("playlist.txt") do
@@ -31,7 +34,6 @@ local function drawMon()
   mon.setTextScale(1)
   local w, h = mon.getSize()
   local half = math.floor(w / 2)
-  local top = 5
   mon.setBackgroundColor(colors.black)
   mon.clear()
   mon.setTextColor(colors.white)
@@ -41,18 +43,29 @@ local function drawMon()
   mon.setTextColor(paused and colors.red or colors.lime)
   mon.write(paused and "PAUSED" or "PLAYING")
 
+  -- volume slider
+  local barLen = w - BAR_X
+  local filled = math.floor(volume / 3 * barLen + 0.5)
+  mon.setTextColor(colors.white)
+  mon.setCursorPos(2, 4) mon.write("Vol")
+  mon.setCursorPos(BAR_X, 4)
+  mon.setBackgroundColor(colors.lime)
+  mon.write(string.rep(" ", filled))
+  mon.setBackgroundColor(colors.gray)
+  mon.write(string.rep(" ", barLen - filled))
+  mon.setBackgroundColor(colors.black)
+
+  -- buttons
   local left = paused and colors.green or colors.orange
-  for y = top, h do
+  for y = TOP, h do
     mon.setCursorPos(1, y)
     mon.setBackgroundColor(left)
     mon.write(string.rep(" ", half))
     mon.setBackgroundColor(colors.blue)
     mon.write(string.rep(" ", w - half))
   end
-
-  local mid = math.floor((top + h) / 2)
+  local mid = math.floor((TOP + h) / 2)
   local label = paused and "PLAY" or "PAUSE"
-  mon.setTextColor(colors.white)
   mon.setBackgroundColor(left)
   mon.setCursorPos(math.floor((half - #label) / 2) + 1, mid)
   mon.write(label)
@@ -64,6 +77,12 @@ end
 local function setPaused(state)
   paused = state
   print(paused and "Paused" or "Resumed")
+  drawMon()
+end
+
+local function setVolume(v)
+  volume = math.max(0, math.min(3, math.floor(v * 4 + 0.5) / 4))
+  print("Volume: " .. volume)
   drawMon()
 end
 
@@ -91,38 +110,4 @@ local function broadcast()
           if skip then break end
           local chunk = h.read(CHUNK)
           if not chunk then break end
-          rednet.broadcast({ station = name, title = current, data = chunk }, "radio")
-          t = t + DUR
-          sleep(math.max(0, t - os.clock() - 0.1))
-        end
-        h.close()
-      else
-        print("Can't open " .. song.title)
-      end
-    end
-  end
-end
-
-local function control()
-  while true do
-    local ev, a, b, c = os.pullEvent()
-    if ev == "key" and a == keys.s then
-      doSkip()
-    elseif ev == "key" and a == keys.p then
-      setPaused(not paused)
-    elseif ev == "monitor_touch" and mon then
-      local w = mon.getSize()
-      if b <= math.floor(w / 2) then
-        setPaused(not paused)
-      else
-        doSkip()
-      end
-    elseif ev == "rednet_message" and c == "radio_ctrl" and type(b) == "table" then
-      if b.skip == name then doSkip() end
-      if b.pause == name then setPaused(b.state) end
-    end
-  end
-end
-
-print("Broadcasting as " .. name .. "  (S = skip, P = pause, touch screen)")
-parallel.waitForAny(broadcast, control)
+          rednet.broadcast({ station = name, title = current, data = chunk, volume =
