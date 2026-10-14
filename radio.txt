@@ -12,6 +12,14 @@ local function show()
   print("\n<- -> station   S skip")
 end
 
+local function tune(name)
+  if name == tuned then return end
+  tuned, current = name, nil
+  dec = dfpwm.make_decoder()
+  speaker.stop()
+  show()
+end
+
 local function listen()
   while true do
     local id, msg = rednet.receive("radio")
@@ -19,7 +27,7 @@ local function listen()
       if not known[msg.station] then
         known[msg.station] = true
         table.insert(list, msg.station)
-        if not tuned then tuned = msg.station show() end
+        if not tuned then tune(msg.station) end
       end
       if msg.station == tuned then
         if msg.title ~= current then current = msg.title show() end
@@ -32,6 +40,15 @@ local function listen()
   end
 end
 
+local function remote()
+  while true do
+    local id, msg = rednet.receive("radio_ctrl")
+    if type(msg) == "table" and msg.tune then
+      tune(msg.tune)
+    end
+  end
+end
+
 local function controls()
   while true do
     local _, key = os.pullEvent("key")
@@ -39,10 +56,7 @@ local function controls()
       local i = 1
       for n, s in ipairs(list) do if s == tuned then i = n end end
       i = key == keys.right and i % #list + 1 or (i - 2) % #list + 1
-      tuned, current = list[i], nil
-      dec = dfpwm.make_decoder()
-      speaker.stop()
-      show()
+      tune(list[i])
     elseif key == keys.s and tuned then
       rednet.broadcast({ skip = tuned }, "radio_ctrl")
       speaker.stop()
@@ -51,4 +65,4 @@ local function controls()
 end
 
 show()
-parallel.waitForAny(listen, controls)
+parallel.waitForAny(listen, remote, controls)
