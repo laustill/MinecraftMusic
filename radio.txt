@@ -1,0 +1,35 @@
+peripheral.find("modem", rednet.open)
+local speaker = peripheral.find("speaker")
+local dec = require("cc.audio.dfpwm").make_decoder()
+local station, current
+
+local function listen()
+  while true do
+    local id, msg = rednet.receive("radio")
+    if type(msg) == "table" and msg.data then
+      station = msg.station
+      if msg.title ~= current then
+        current = msg.title
+        print("Playing: " .. current)
+      end
+      local buf = dec(msg.data)
+      while not speaker.playAudio(buf, 3) do
+        os.pullEvent("speaker_audio_empty")
+      end
+    end
+  end
+end
+
+local function controls()
+  while true do
+    local _, key = os.pullEvent("key")
+    if key == keys.s and station then
+      rednet.broadcast({ skip = station }, "radio_ctrl")
+      speaker.stop()
+      print("Skipping...")
+    end
+  end
+end
+
+print("Listening...  (S = skip)")
+parallel.waitForAny(listen, controls)
