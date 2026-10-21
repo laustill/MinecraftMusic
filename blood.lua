@@ -4,7 +4,8 @@ local TANKS = { 80, 71, 914,  65, 76, 941, "Filled" }
 local DROP = { 68, 72, 910 }
 
 local FLUID = "evilcraft:blood"
-local WAIT = 30
+local WAIT = 30          -- pause after each delivery
+local COLLECT_TIME = 20  -- max seconds to spend collecting
 
 local sides = { "up", "down", "north", "south", "east", "west" }
 
@@ -16,13 +17,19 @@ local function setup(area, filter)
   for _, s in ipairs(sides) do pcall(d.setSide, s, true) end
 end
 
-local function run(action, area, filter)
+local function run(action, area, filter, timeout)
   setup(area, filter)
   d.setAction(action)
   sleep(1)
   local start = os.clock()
-  while not d.isActionDone() do sleep(0.5) end
-  print("  took " .. string.format("%.1f", os.clock() - start + 1) .. "s")
+  while not d.isActionDone() do
+    if timeout and os.clock() - start > timeout then
+      pcall(d.abortAction)
+      print("  time limit reached")
+      return
+    end
+    sleep(0.5)
+  end
 end
 
 print("Waiting for drone...")
@@ -32,7 +39,7 @@ print("Drone connected")
 while true do
   print("Pressure: " .. string.format("%.1f", d.getDronePressure()))
   print("Collecting blood...")
-  run("pneumaticcraft:liquid_import", TANKS, true)
+  run("pneumaticcraft:liquid_import", TANKS, true, COLLECT_TIME)
   print("Delivering...")
   run("pneumaticcraft:liquid_export", DROP, false)
   print("Done. Next run in " .. WAIT .. "s")
